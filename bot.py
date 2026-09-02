@@ -106,7 +106,10 @@ async def fetch_posts(client: httpx.AsyncClient, blog: str, limit: int) -> list[
     что раньше отдавал Tumblr API, — остальной код ниже это не замечает.
     """
     url = RSS_URL_TEMPLATE.format(blog=blog)
-    resp = await client.get(url, timeout=15)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.3"
+    }
+    resp = await client.get(url, timeout=15, headers=headers)
     resp.raise_for_status()
     # Парсинг маленького XML-документа занимает микросекунды, поэтому
     # гонять его в отдельном потоке смысла нет — можно прямо в корутине.
